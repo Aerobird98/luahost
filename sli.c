@@ -3,6 +3,10 @@
 
 #include <lua.h>
 #include <lauxlib.h>
+
+#define luaL_dobuffer(L, b, n, s) \
+	(luaL_loadbuffer(L, b, n, s) || lua_pcall(L, 0, LUA_MULTRET, 0))
+
 #include <lualib.h>
 
 int main (int argc, char ** argv) {
