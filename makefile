@@ -3,12 +3,12 @@ CC = gcc
 SRC = sli.c
 OUT = sli
 
-LUA_DIR = f:/lua
-LUA_BIN = $(LUA_DIR)/bin
+LUA_DIR = /usr/local
+LUA_LIB = $(LUA_DIR)/lib
 LUA_INC = $(LUA_DIR)/include
-LUA_DLL = lua53
+LUA_LIBRARY = lua
 
-CFLAGS = -o$(OUT) -I$(LUA_INC) -L$(LUA_BIN) -l$(LUA_DLL)
+CFLAGS = -o$(OUT) -I$(LUA_INC) -L$(LUA_LIB) -l$(LUA_LIBRARY) -lm -ldl
 
-build:
+linux:
 	$(CC) $(SRC) $(CFLAGS)
