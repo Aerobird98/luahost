@@ -6,7 +6,7 @@ and also serves as an experiment in the road to learning C/C++ and the powerfull
 ## To build (...)
 
 You need `gcc` or any other c compiler.
-Open a terminal and run `> make build` to build the sli.exe file.
+Open a terminal and run `> make build` to build.
 
 ## License
 sli is licensed under the [MIT license](https://raw.githubusercontent.com/Aerobird98/sli/master/LICENSE.txt).
