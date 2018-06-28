@@ -1,7 +1,6 @@
 CC = gcc
-
-SRC = sli.c
-OUT = sli
+SRC = luahost.c
+OUT = luahost
 
 LUA_DIR = /usr/local
 LUA_LIB = $(LUA_DIR)/lib
