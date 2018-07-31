@@ -5,22 +5,22 @@
 
 //a custom c function for lua
 int ltestf(lua_State *l) {
- printf("%s\n","host says: test function called.");
- //push a boolean value in the stack. stack: [<args>, true]
- lua_pushboolean(l,1);
- //the number of values (in the stack) seen by lua as return values
- return 1;
+  printf("%s\n","host says: test function called.");
+  //push a boolean value in the stack. stack: [<args>, true]
+  lua_pushboolean(l,1);
+  //the number of values (in the stack) seen by lua as return values
+  return 1;
 };
 //a custom c library of functions callable from lua
 int luaopen_test(lua_State *l) {
- luaL_Reg fns[] = {
-  {"testf",ltestf},
-  //the last element here needs to be {NULL,NULL}
-  {NULL,NULL}
- };
- //creates a new libtable and sets all functions from the given list
- luaL_newlib(l,fns);
- return 1;
+  luaL_Reg fns[] = {
+    {"testf",ltestf},
+    //the last element here needs to be {NULL,NULL}
+    {NULL,NULL}
+  };
+  //creates a new libtable and sets all functions from the given list
+  luaL_newlib(l,fns);
+  return 1;
 };
 
 int main() {
