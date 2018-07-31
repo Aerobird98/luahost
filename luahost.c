@@ -1,43 +1,42 @@
-#include <stdio.h>
-#include <string.h>
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+#include "stdio.h"
 
-#include <lua.h>
-#include <lauxlib.h>
+//a custom c function for lua
+int ltestf(lua_State *l) {
+ printf("%s\n","host says: test function called.");
+ //push a boolean value in the stack. stack: [<args>, true]
+ lua_pushboolean(l,1);
+ //the number of values (in the stack) seen by lua as return values
+ return 1;
+};
+//a custom c library of functions callable from lua
+int luaopen_test(lua_State *l) {
+ luaL_Reg fns[] = {
+  {"testf",ltestf},
+  //the last element here needs to be {NULL,NULL}
+  {NULL,NULL}
+ };
+ //creates a new libtable and sets all functions from the given list
+ luaL_newlib(l,fns);
+ return 1;
+};
 
-#define luaL_dobuffer(L, b, n, s) \
-	(luaL_loadbuffer(L, b, n, s) || lua_pcall(L, 0, LUA_MULTRET, 0))
-
-#include <lualib.h>
-
-int main (int argc, char ** argv) {
-  int l_state = 0;
-
-  lua_State *l = luaL_newstate();   /* new lua state */
-  luaL_openlibs(l); /* opens std libs for lua */
-
-  int i;
-  for (i=1; i<argc; i++) {
-    l_state = 1;
-    const char *file = argv[i];
-    int e = luaL_dofile(l, file);
-    if (e) {
-      fprintf(stderr, "%s\n", lua_tostring(l, -1));
-      lua_pop(l, 1); /* pop error message from the stack */
-    }
-  }
-
-  if (l_state == 0) {
-    fprintf(stdout,"SLI for lua 5.3.4 (Simple Lua Interpreter) by Aerobird98\n");
-    char buff[256];
-    while (fprintf(stdout,"> ") && fgets(buff, sizeof(buff), stdin) != NULL) {
-      int e = luaL_dobuffer(l, buff, strlen(buff) - 1, "=stdin");
-      if (e) {
-        fprintf(stderr, "%s\n", lua_tostring(l, -1));
-        lua_pop(l, 1); /* pop error message from the stack */
-      }
-    }
-  }
-
-  lua_close(l); /* close lua state */
+int main() {
+  //create a new lua state
+  lua_State *l = luaL_newstate();
+  //open all stdlibs for this state
+  //luaL_openlibs(l);
+  //open just the base functions this state
+  luaopen_base(l);
+  //open our custom libtable
+  luaopen_test(l);
+  //and set a global for it
+  lua_setglobal(l,"test");
+  //do a lua file in this state
+  int e = luaL_dofile(l,"test.lua");
+  //print error messages in case of errors
+  if (e) { fprintf(stderr,"%s\n",lua_tostring(l,-1)); };
   return 0;
-}
+};
